@@ -3,7 +3,7 @@
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
 
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
@@ -11,33 +11,58 @@ import * as React from 'react';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import TabTwoScreen from '../screens/StatusScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import ChatsScreen from '../screens/ChatsScreen';
+import CallsScreen from '../screens/CallsScreen';
+import StatusScreen from '../screens/StatusScreen';
 
-const BottomTab = createBottomTabNavigator<BottomTabParamList>();
+const MainTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
-    <BottomTab.Navigator
+    <MainTab.Navigator
       initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
-      <BottomTab.Screen
-        name="TabOne"
+      tabBarOptions={{
+        activeTintColor: Colors.dark.text,
+        style: {
+          backgroundColor: Colors[colorScheme].tint
+        },
+        labelStyle: {
+          fontWeight: 'bold'
+        }
+      }}>
+      <MainTab.Screen
+        name="Timeline"
         component={TabOneNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons name="timeline" size={24} color="black" />,
         }}
       />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+      <MainTab.Screen
+        name="Chats"
+        component={ChatsScreen}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <Ionicons name="chatbubbles-outline" size={26} color="black" />,
         }}
       />
-    </BottomTab.Navigator>
+      <MainTab.Screen
+        name="Status"
+        component={StatusScreen}
+        options={{
+          tabBarIcon: ({ color }) => <MaterialIcons name="update" size={24} color="black" />,
+        }}
+      />
+      <MainTab.Screen
+        name="Calls"
+        component={CallsScreen}
+        options={{
+          tabBarIcon: ({ color }) => <Feather name="phone-call" size={24} color="black" />,
+        }}
+      />
+    </MainTab.Navigator>
   );
 }
 
@@ -63,16 +88,3 @@ function TabOneNavigator() {
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
-
-function TabTwoNavigator() {
-  return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
-      />
-    </TabTwoStack.Navigator>
-  );
-}
